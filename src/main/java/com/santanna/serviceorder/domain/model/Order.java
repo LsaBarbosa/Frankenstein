@@ -16,83 +16,75 @@ public class Order {
         this.orderStatus = newStatus;
     }
 
-    public BigDecimal calculateTotalValue(BigDecimal unitPrice) {
-        return unitPrice.multiply(BigDecimal.valueOf(quantity));
+    // Construtor privado para uso pelo builder
+    private Order(Builder builder) {
+        this.id = builder.id;
+        this.orderNumber = builder.orderNumber;
+        this.productName = builder.productName;
+        this.quantity = builder.quantity;
+        this.totalValue = builder.totalValue;
+        this.orderStatus = builder.orderStatus;
+        this.createdAt = builder.createdAt;
     }
 
-    public Order() {
+    // Getters públicos (imutabilidade garantida)
+    public Long getId() { return id; }
+    public String getOrderNumber() { return orderNumber; }
+    public String getProductName() { return productName; }
+    public Integer getQuantity() { return quantity; }
+    public BigDecimal getTotalValue() { return totalValue; }
+    public OrderStatus getOrderStatus() { return orderStatus; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+
+    // Builder Pattern
+    public static class Builder {
+        private Long id;
+        private String orderNumber;
+        private String productName;
+        private Integer quantity;
+        private BigDecimal totalValue;
+        private OrderStatus orderStatus;
+        private LocalDateTime createdAt;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder orderNumber(String orderNumber) {
+            this.orderNumber = orderNumber;
+            return this;
+        }
+
+        public Builder productName(String productName) {
+            this.productName = productName;
+            return this;
+        }
+
+        public Builder quantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder totalValue(BigDecimal unitPrice) {
+            this.totalValue = unitPrice.multiply(BigDecimal.valueOf(quantity));
+            return this;
+        }
+
+        public Builder orderStatus(OrderStatus orderStatus) {
+            this.orderStatus = orderStatus;
+            return this;
+        }
+
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(this);
+        }
     }
 
-    public Order(Long id, String orderNumber, String productName, Integer quantity, BigDecimal totalValue, OrderStatus orderStatus, LocalDateTime createdAt) {
-        this.id = id;
-        this.orderNumber = orderNumber;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.totalValue = totalValue;
-        this.orderStatus = orderStatus;
-        this.createdAt = createdAt;
-    }
 
-    public Order(String orderNumber, String productName, Integer quantity, BigDecimal totalValue) {
-        this.orderNumber = orderNumber;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.totalValue = totalValue;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getTotalValue() {
-        return totalValue;
-    }
-
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

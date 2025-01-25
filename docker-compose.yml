@@ -44,11 +44,11 @@ services:
       context: .
       dockerfile: Dockerfile
     deploy:
-      replicas: 2
+      replicas: 1
       restart_policy:
         condition: on-failure
     ports:
-        - "8085-8087:8080"
+      - "8080"
     depends_on:
       - mysql
       - redis

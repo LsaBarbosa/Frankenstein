@@ -1,6 +1,6 @@
-package com.santanna.serviceorder.infra.persistence;
+package com.santanna.serviceorder.infrastructure.persistence;
 
-import com.santanna.serviceorder.infra.entity.OrderEntity;
+import com.santanna.serviceorder.infrastructure.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

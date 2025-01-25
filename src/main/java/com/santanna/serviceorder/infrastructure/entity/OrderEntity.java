@@ -1,6 +1,6 @@
-package com.santanna.serviceorder.infra.entity;
+package com.santanna.serviceorder.infrastructure.entity;
 
-import com.santanna.serviceorder.refatoracao.domain.OrderStatus;
+import com.santanna.serviceorder.domain.model.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -2,13 +2,14 @@ package com.santanna.serviceorder.interfaces.messaging;
 
 import com.santanna.serviceorder.application.usecase.CreateOrderUseCase;
 import com.santanna.serviceorder.application.dto.OrderRequestDto;
-import com.santanna.serviceorder.infra.messaging.RabbitMqConfig;
+import com.santanna.serviceorder.infrastructure.messaging.RabbitMqConfig;
 import com.santanna.serviceorder.interfaces.handler.model.BadRequestException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -26,7 +27,7 @@ public class OrderMessageConsumer {
     }
 
     @RabbitListener(queues = RabbitMqConfig.ORDER_QUEUE, concurrency = "3-10")
-    public void receiveOrder(OrderRequestDto orderRequestDto) {
+    public void receiveOrder(@Payload OrderRequestDto orderRequestDto) {
         try {
             loggerUtils.logInfo(OrderMessageConsumer.class, "Received new order message from queue. Order number: {}", orderRequestDto.getOrderNumber());
 
@@ -41,6 +42,7 @@ public class OrderMessageConsumer {
 
                 throw new BadRequestException(sb.toString());
             }
+
             orderService.execute(orderRequestDto);
             loggerUtils.logInfo(OrderMessageConsumer.class, "Order successfully processed. Order number: {}", orderRequestDto.getOrderNumber());
 

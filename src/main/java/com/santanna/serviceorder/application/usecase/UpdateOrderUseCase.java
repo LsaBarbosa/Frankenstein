@@ -2,7 +2,7 @@ package com.santanna.serviceorder.application.usecase;
 
 import com.santanna.serviceorder.application.dto.OrderResponseDto;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
-import com.santanna.serviceorder.application.mapper.OrderMapper;
+import com.santanna.serviceorder.domain.model.OrderConverter;
 import com.santanna.serviceorder.domain.model.OrderStatus;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
 import com.santanna.serviceorder.interfaces.handler.model.NotFoundException;
@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UpdateOrderUseCase {
 
-    private final OrderMapper orderMapper;
     private final LoggerUtils loggerUtils;
     private final OrderRepository orderRepository;
 
-    public UpdateOrderUseCase(OrderMapper orderMapper, LoggerUtils loggerUtils, OrderRepository orderRepository) {
-        this.orderMapper = orderMapper;
+    public UpdateOrderUseCase(LoggerUtils loggerUtils, OrderRepository orderRepository) {
         this.loggerUtils = loggerUtils;
         this.orderRepository = orderRepository;
     }
@@ -37,6 +35,6 @@ public class UpdateOrderUseCase {
         var updatedOrder = orderRepository.save(order);
 
         loggerUtils.logInfo(UpdateOrderUseCase.class, "Order status updated successfully. ID: {}, New Status: {}", id, newStatus);
-        return orderMapper.toDto(updatedOrder);
+        return OrderConverter.toDto(updatedOrder);
     }
 }

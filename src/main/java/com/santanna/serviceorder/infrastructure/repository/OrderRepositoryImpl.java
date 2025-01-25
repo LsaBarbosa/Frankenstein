@@ -1,0 +1,111 @@
+package com.santanna.serviceorder.infrastructure.repository;
+
+import com.santanna.serviceorder.domain.common.PaginatedResult;
+import com.santanna.serviceorder.domain.model.Order;
+import com.santanna.serviceorder.domain.repository.OrderRepository;
+import com.santanna.serviceorder.infrastructure.entity.OrderEntity;
+import com.santanna.serviceorder.infrastructure.persistence.SpringDataOrderRepository;
+import com.santanna.serviceorder.infrastructure.repository.exception.DatabaseException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Repository
+public class OrderRepositoryImpl implements OrderRepository {
+    private final SpringDataOrderRepository springDataOrderRepository;
+
+
+    public OrderRepositoryImpl(SpringDataOrderRepository springDataOrderRepository ) {
+        this.springDataOrderRepository = springDataOrderRepository;
+
+    }
+
+    @Override
+    public Optional<Order> findByOrderNumber(String orderNumber) {
+        try {
+            return springDataOrderRepository.findByOrderNumber(orderNumber)
+                    .map(this::toDomain);
+        } catch (Exception e) {
+            throw new DatabaseException("Error finding order by order number: " + orderNumber, e);
+        }
+    }
+
+    @Override
+    public Optional<Order> findById(Long id) {
+        try {
+            return springDataOrderRepository.findById(id)
+                    .map(this::toDomain);
+        } catch (Exception e) {
+            throw new DatabaseException("Error finding order by ID: " + id, e);
+        }
+    }
+
+    @Override
+    public PaginatedResult<Order> findAll(int page, int size) {
+        try {
+            var entityPage = springDataOrderRepository.findAll(PageRequest.of(page, size));
+            return new PaginatedResult<>(
+                    entityPage.getContent().stream()
+                            .map(this::toDomain)
+                            .collect(Collectors.toList()),
+                    entityPage.getNumber(),
+                    entityPage.getSize(),
+                    entityPage.getTotalElements()
+            );
+        } catch (Exception e) {
+            throw new DatabaseException("Error fetching paginated orders", e);
+        }
+    }
+
+    @Override
+    public Order save(Order order) {
+        try {
+            OrderEntity entity = this.toEntity(order);
+            OrderEntity savedEntity = springDataOrderRepository.save(entity);
+            return toDomain(savedEntity);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Order already exists with number: " + order.getOrderNumber(), e);
+        } catch (Exception e) {
+            throw new DatabaseException("Error saving order", e);
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        try {
+            springDataOrderRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DatabaseException("Order with ID " + id + " not found.", e);
+        } catch (Exception e) {
+            throw new DatabaseException("Error deleting order with ID: " + id, e);
+        }
+    }
+
+    private Order toDomain(OrderEntity entity) {
+        return new Order.Builder()
+                .id(entity.getId())
+                .orderNumber(entity.getOrderNumber())
+                .productName(entity.getProductName())
+                .quantity(entity.getQuantity())
+                .totalValue(entity.getTotalValue())
+                .orderStatus(entity.getOrderStatus())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    private OrderEntity toEntity(Order order) {
+        return new OrderEntity(
+                order.getId(),
+                order.getOrderNumber(),
+                order.getProductName(),
+                order.getQuantity(),
+                order.getTotalValue(),
+                order.getOrderStatus(),
+                order.getCreatedAt()
+        );
+    }
+}

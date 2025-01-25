@@ -1,9 +1,8 @@
 package com.santanna.serviceorder.application.usecase;
 
+import com.santanna.serviceorder.application.usecase.exception.NotFoundException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
-import com.santanna.serviceorder.application.mapper.OrderMapper;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
-import com.santanna.serviceorder.interfaces.handler.model.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -11,12 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeleteOrderUseCase {
 
-    private final OrderMapper orderMapper;
+
     private final LoggerUtils loggerUtils;
     private final OrderRepository orderRepository;
 
-    public DeleteOrderUseCase(OrderMapper orderMapper, LoggerUtils loggerUtils, OrderRepository orderRepository) {
-        this.orderMapper = orderMapper;
+    public DeleteOrderUseCase(LoggerUtils loggerUtils, OrderRepository orderRepository) {
         this.loggerUtils = loggerUtils;
         this.orderRepository = orderRepository;
     }

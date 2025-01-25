@@ -1,4 +1,4 @@
-package com.santanna.serviceorder.infra.config;
+package com.santanna.serviceorder.infrastructure.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

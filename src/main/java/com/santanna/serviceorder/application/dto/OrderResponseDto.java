@@ -1,7 +1,7 @@
 package com.santanna.serviceorder.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.santanna.serviceorder.refatoracao.domain.OrderStatus;
+import com.santanna.serviceorder.domain.model.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

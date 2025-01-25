@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class OrderRequestDto {
+
     @Schema(description = "Número único do pedido", example = "ORD12345")
     @NotBlank(message = "O número do pedido é obrigatório.")
     private String orderNumber;

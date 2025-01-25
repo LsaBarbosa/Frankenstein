@@ -15,7 +15,7 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Copia o JAR gerado na etapa de construção
-COPY --from=build /app/build/libs/service-orderEntity-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/*.jar app.jar
 
 # Porta exposta pela aplicação
 EXPOSE 8080

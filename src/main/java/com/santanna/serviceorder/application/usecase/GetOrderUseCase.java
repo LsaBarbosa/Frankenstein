@@ -1,11 +1,11 @@
 package com.santanna.serviceorder.application.usecase;
 
 import com.santanna.serviceorder.application.dto.OrderResponseDto;
+import com.santanna.serviceorder.application.usecase.exception.NotFoundException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
-import com.santanna.serviceorder.application.mapper.OrderMapper;
 import com.santanna.serviceorder.domain.common.PaginatedResult;
+import com.santanna.serviceorder.domain.model.OrderConverter;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
-import com.santanna.serviceorder.interfaces.handler.model.NotFoundException;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class GetOrderUseCase {
 
-    private final OrderMapper orderMapper;
+
     private final LoggerUtils loggerUtils;
     private final OrderRepository orderRepository;
 
-    public GetOrderUseCase(OrderMapper orderMapper, LoggerUtils loggerUtils, OrderRepository orderRepository) {
-        this.orderMapper = orderMapper;
+    public GetOrderUseCase(LoggerUtils loggerUtils, OrderRepository orderRepository) {
         this.loggerUtils = loggerUtils;
         this.orderRepository = orderRepository;
     }
@@ -36,7 +35,7 @@ public class GetOrderUseCase {
                 });
 
         loggerUtils.logInfo(GetOrderUseCase.class, "Order found. ID: {}", id);
-        return orderMapper.toDto(order);
+        return OrderConverter.toDto(order);
     }
 
 
@@ -48,7 +47,7 @@ public class GetOrderUseCase {
 
         return new PaginatedResult<>(
                 orders.getContent().stream()
-                        .map(orderMapper::toDto)
+                        .map(OrderConverter::toDto)
                         .collect(Collectors.toList()),
                 orders.getPageNumber(),
                 orders.getPageSize(),
