@@ -28,7 +28,7 @@ public record OrderResponseDto (
     @Schema(description = "Status do pedido", example = "PROCESSED")
     OrderStatus status,
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+   // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Schema(description = "Data de criação do pedido", example = "2024-01-01T12:00:00")
     LocalDateTime createdAt
 ) {}

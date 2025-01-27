@@ -14,35 +14,73 @@ public class Order {
     private OrderStatus orderStatus;
     private LocalDateTime createdAt;
 
-    public Order(Long id, String orderNumber, String productName, Integer quantity, BigDecimal unitPrice, OrderStatus orderStatus, LocalDateTime createdAt) {
-        if (quantity <= 0) {
-            throw new DomainException("A quantidade do pedido deve ser maior que zero.");
-        }
-        if (unitPrice.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new DomainException("O preço unitário deve ser maior que zero.");
-        }
+    public Order() {}
+
+    public Order(Long id, String orderNumber, String productName, Integer quantity, BigDecimal totalValue, OrderStatus orderStatus, LocalDateTime createdAt) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.productName = productName;
         this.quantity = quantity;
-        this.totalValue = calculateTotalValue(unitPrice, quantity);
+        this.totalValue = totalValue;
         this.orderStatus = orderStatus;
         this.createdAt = createdAt;
     }
 
-    // Métodos fábrica estáticos para facilitar a criação
-    public static Order of(Long id, String orderNumber, String productName, Integer quantity, BigDecimal unitPrice, OrderStatus orderStatus, LocalDateTime createdAt) {
-        return new Order(id, orderNumber, productName, quantity, unitPrice, orderStatus, createdAt);
+    public Long getId() {
+        return id;
     }
 
-    // Getters públicos
-    public Long getId() { return id; }
-    public String getOrderNumber() { return orderNumber; }
-    public String getProductName() { return productName; }
-    public Integer getQuantity() { return quantity; }
-    public BigDecimal getTotalValue() { return totalValue; }
-    public OrderStatus getOrderStatus() { return orderStatus; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public void updateStatus(OrderStatus newStatus) {
         this.orderStatus = newStatus;
