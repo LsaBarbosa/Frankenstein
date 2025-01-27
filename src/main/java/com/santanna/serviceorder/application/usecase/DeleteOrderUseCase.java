@@ -1,5 +1,6 @@
 package com.santanna.serviceorder.application.usecase;
 
+import com.santanna.serviceorder.application.usecase.exception.BusinessException;
 import com.santanna.serviceorder.application.usecase.exception.NotFoundException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
@@ -25,14 +26,19 @@ public class DeleteOrderUseCase {
     public void execute(Long id) {
         loggerUtils.logInfo(DeleteOrderUseCase.class, "Attempting to delete order with ID: {}", id);
 
-        orderRepository.findById(id)
-                .orElseThrow(() -> {
-                    loggerUtils.logWarn(DeleteOrderUseCase.class, "Order with ID {} not found", id);
-                    return new NotFoundException("Order not found with ID: " + id);
-                });
+        var isIsPresent = orderRepository.findById(id).isPresent();
+        if (isIsPresent) {
+            loggerUtils.logWarn(DeleteOrderUseCase.class, "Order with ID {} not found", id);
+            throw new NotFoundException("Order not found with ID: " + id);
+        }
 
+
+        try {
         orderRepository.deleteById(id);
         loggerUtils.logInfo(DeleteOrderUseCase.class, "Order with ID {} deleted successfully", id);
+        }catch (Exception e) {
+            throw new BusinessException("Order cannot delete: " + id);
+        }
     }
 
 }

@@ -2,25 +2,33 @@ package com.santanna.serviceorder.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.santanna.serviceorder.domain.model.OrderStatus;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class OrderResponseDto {
-    private Long id;
-    private String orderNumber;
-    private String productName;
-    private Integer quantity;
-    private BigDecimal totalValue;
-    private OrderStatus status;
+
+public record OrderResponseDto (
+    @Schema(description = "ID do pedido", example = "1")
+    Long id,
+
+    @Schema(description = "Número do pedido", example = "ORD12345")
+    String orderNumber,
+
+    @Schema(description = "Nome do produto", example = "Produto Exemplo")
+    String productName,
+
+    @Schema(description = "Quantidade do produto", example = "10")
+    Integer quantity,
+
+    @Schema(description = "Valor total do pedido", example = "1000.00")
+    BigDecimal totalValue,
+
+    @Schema(description = "Status do pedido", example = "PROCESSED")
+    OrderStatus status,
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;
-}
+    @Schema(description = "Data de criação do pedido", example = "2024-01-01T12:00:00")
+    LocalDateTime createdAt
+) {}

@@ -27,14 +27,9 @@ public class GetOrderUseCase {
     public OrderResponseDto getById(Long id) {
         loggerUtils.logInfo(GetOrderUseCase.class, "Fetching order by ID: {}", id);
 
-        var order = orderRepository.findById(id)
-                .orElseThrow(() -> {
-                    loggerUtils.logWarn(GetOrderUseCase.class, "Order with ID {} not found", id);
-                    return new NotFoundException("Order not found with ID: " + id);
-
-                });
-
+        var order = orderRepository.findById(id).orElseThrow(()-> new NotFoundException("Order not found"));
         loggerUtils.logInfo(GetOrderUseCase.class, "Order found. ID: {}", id);
+
         return OrderConverter.toDto(order);
     }
 

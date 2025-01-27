@@ -1,5 +1,7 @@
 package com.santanna.serviceorder.domain.common;
 
+import com.santanna.serviceorder.domain.exception.DomainException;
+
 import java.util.List;
 
 public class PaginatedResult<T> {
@@ -10,6 +12,13 @@ public class PaginatedResult<T> {
     private int totalPages;
 
     public PaginatedResult(List<T> content, int pageNumber, int pageSize, long totalElements) {
+        if (pageNumber < 0) {
+            throw new DomainException("O número da página não pode ser negativo.");
+        }
+        if (pageSize <= 0) {
+            throw new DomainException("O tamanho da página deve ser maior que zero.");
+        }
+
         this.content = content;
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
@@ -17,8 +26,6 @@ public class PaginatedResult<T> {
         this.totalPages = (int) Math.ceil((double) totalElements / pageSize);
     }
 
-    public PaginatedResult() {
-    }
 
     public List<T> getContent() {
         return content;

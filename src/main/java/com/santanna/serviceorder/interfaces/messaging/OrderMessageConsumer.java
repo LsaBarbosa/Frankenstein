@@ -1,10 +1,10 @@
 package com.santanna.serviceorder.interfaces.messaging;
 
-import com.santanna.serviceorder.application.usecase.CreateOrderUseCase;
 import com.santanna.serviceorder.application.dto.OrderRequestDto;
-import com.santanna.serviceorder.infrastructure.messaging.RabbitMqConfig;
-import com.santanna.serviceorder.interfaces.handler.model.BadRequestException;
+import com.santanna.serviceorder.application.usecase.CreateOrderUseCase;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
+import com.santanna.serviceorder.infrastructure.messaging.RabbitMqConfig;
+import com.santanna.serviceorder.interfaces.exception.MessageValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
@@ -29,7 +29,7 @@ public class OrderMessageConsumer {
     @RabbitListener(queues = RabbitMqConfig.ORDER_QUEUE, concurrency = "3-10")
     public void receiveOrder(@Payload OrderRequestDto orderRequestDto) {
         try {
-            loggerUtils.logInfo(OrderMessageConsumer.class, "Received new order message from queue. Order number: {}", orderRequestDto.getOrderNumber());
+            loggerUtils.logInfo(OrderMessageConsumer.class, "Received new order message from queue. Order number: {}", orderRequestDto.orderNumber());
 
             Set<ConstraintViolation<OrderRequestDto>> violations = validator.validate(orderRequestDto);
 
@@ -38,16 +38,16 @@ public class OrderMessageConsumer {
                 for (ConstraintViolation<OrderRequestDto> violation : violations) {
                     sb.append(violation.getPropertyPath()).append(" ").append(violation.getMessage()).append("; ");
                 }
-                loggerUtils.logWarn(OrderMessageConsumer.class, "Validation failed for order number {}: {}", orderRequestDto.getOrderNumber(), sb.toString());
+                loggerUtils.logWarn(OrderMessageConsumer.class, "Validation failed for order number {}: {}", orderRequestDto.orderNumber(), sb.toString());
 
-                throw new BadRequestException(sb.toString());
+                throw new MessageValidationException(sb.toString());
             }
 
             orderService.execute(orderRequestDto);
-            loggerUtils.logInfo(OrderMessageConsumer.class, "Order successfully processed. Order number: {}", orderRequestDto.getOrderNumber());
+            loggerUtils.logInfo(OrderMessageConsumer.class, "Order successfully processed. Order number: {}", orderRequestDto.orderNumber());
 
         } catch (Exception e) {
-            loggerUtils.logWarn(OrderMessageConsumer.class, "Bad request error while processing order number {}: {}", orderRequestDto.getOrderNumber(), e.getMessage());
+            loggerUtils.logWarn(OrderMessageConsumer.class, "Bad request error while processing order number {}: {}", orderRequestDto.orderNumber(), e.getMessage());
             throw new AmqpRejectAndDontRequeueException("Erro crítico: " + e.getMessage());
         }
     }

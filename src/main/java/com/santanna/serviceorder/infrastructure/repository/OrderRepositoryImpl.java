@@ -4,8 +4,8 @@ import com.santanna.serviceorder.domain.common.PaginatedResult;
 import com.santanna.serviceorder.domain.model.Order;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
 import com.santanna.serviceorder.infrastructure.entity.OrderEntity;
+import com.santanna.serviceorder.infrastructure.exception.DatabaseException;
 import com.santanna.serviceorder.infrastructure.persistence.SpringDataOrderRepository;
-import com.santanna.serviceorder.infrastructure.repository.exception.DatabaseException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -86,15 +86,15 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     private Order toDomain(OrderEntity entity) {
-        return new Order.Builder()
-                .id(entity.getId())
-                .orderNumber(entity.getOrderNumber())
-                .productName(entity.getProductName())
-                .quantity(entity.getQuantity())
-                .totalValue(entity.getTotalValue())
-                .orderStatus(entity.getOrderStatus())
-                .createdAt(entity.getCreatedAt())
-                .build();
+        return new Order(
+                entity.getId(),
+                entity.getOrderNumber(),
+                entity.getProductName(),
+                entity.getQuantity(),
+                entity.getTotalValue(),
+                entity.getOrderStatus(),
+                entity.getCreatedAt()
+        );
     }
 
     private OrderEntity toEntity(Order order) {
@@ -108,4 +108,5 @@ public class OrderRepositoryImpl implements OrderRepository {
                 order.getCreatedAt()
         );
     }
+
 }
