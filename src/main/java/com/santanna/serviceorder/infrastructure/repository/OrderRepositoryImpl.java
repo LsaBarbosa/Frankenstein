@@ -1,5 +1,7 @@
 package com.santanna.serviceorder.infrastructure.repository;
 
+import com.santanna.serviceorder.domain.builder.OrderDirector;
+import com.santanna.serviceorder.domain.builder.objectbuild.CreateOrderBuilder;
 import com.santanna.serviceorder.domain.common.PaginatedResult;
 import com.santanna.serviceorder.domain.model.Order;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
@@ -84,6 +86,10 @@ public class OrderRepositoryImpl implements OrderRepository {
             throw new DatabaseException("Error deleting order with ID: " + id, e);
         }
     }
+
+
+    CreateOrderBuilder createOrderBuilder = new CreateOrderBuilder();
+    OrderDirector director = new OrderDirector(createOrderBuilder);
 
     private Order toDomain(OrderEntity entity) {
         return new Order(
