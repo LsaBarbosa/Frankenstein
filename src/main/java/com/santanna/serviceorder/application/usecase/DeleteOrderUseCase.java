@@ -27,7 +27,7 @@ public class DeleteOrderUseCase {
         loggerUtils.logInfo(DeleteOrderUseCase.class, "Attempting to delete order with ID: {}", id);
 
         var isIsPresent = orderRepository.findById(id).isPresent();
-        if (isIsPresent) {
+        if (!isIsPresent) {
             loggerUtils.logWarn(DeleteOrderUseCase.class, "Order with ID {} not found", id);
             throw new NotFoundException("Order not found with ID: " + id);
         }
