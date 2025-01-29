@@ -43,7 +43,7 @@ public class OrderController {
     })
     @PostMapping
     public ResponseEntity<OrderResponseDto> createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
-        loggerUtils.logInfo(OrderController.class, "Recebendo solicitação para criar pedido: {}", orderRequestDto.orderNumber());
+        loggerUtils.logInfo(OrderController.class, "Receiving request to create order: {}", orderRequestDto.orderNumber());
         OrderResponseDto createdOrder = createOrderUseCase.execute(orderRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
@@ -53,10 +53,9 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus newStatus) {
-        loggerUtils.logInfo(OrderController.class, "Atualizando status do pedido com ID: {}", id);
+        loggerUtils.logInfo(OrderController.class, "Order with ID {} not found", id);
         updateOrderStatusUseCase.execute(id, newStatus);
         return ResponseEntity.ok().build();
     }
@@ -68,21 +67,11 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<PaginatedResult<OrderResponseDto>> getOrders(@RequestParam(defaultValue = "0") int page,
                                                                        @RequestParam(defaultValue = "10") int size) {
-        loggerUtils.logInfo(OrderController.class, "Listando pedidos - Página: {}, Tamanho: {}", page, size);
+        loggerUtils.logInfo(OrderController.class, "Listing orders - Page: {}, Size: {}", page, size);
         PaginatedResult<OrderResponseDto> orders = getOrderUseCase.getAllOrders(page, size);
         return ResponseEntity.ok(orders);
     }
 
-    @Operation(summary = "Deleta um pedido pelo ID", responses = {
-            @ApiResponse(responseCode = "204", description = "Pedido deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        loggerUtils.logInfo(OrderController.class, "Excluindo pedido com ID: {}", id);
-        deleteOrderUseCase.execute(id);
-        return ResponseEntity.noContent().build();
-    }
 
     @Operation(summary = "Buscar um pedido por ID", description = "Retorna os detalhes de um pedido específico")
     @ApiResponse(responseCode = "200", description = "Pedido encontrado")
@@ -98,4 +87,14 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    @Operation(summary = "Deleta um pedido pelo ID", responses = {
+            @ApiResponse(responseCode = "204", description = "Pedido deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        loggerUtils.logInfo(OrderController.class, "Order with ID {} not found", id);
+        deleteOrderUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -32,7 +32,7 @@ public class CreateOrderUseCase {
 
         boolean isOrderPresent = orderRepository.findByOrderNumber(requestDto.orderNumber()).isPresent();
         if (isOrderPresent) {
-            throw new BusinessException("Já existe um pedido com este número.");
+            throw new BusinessException("There is already an order with this number.");
         }
 
 
