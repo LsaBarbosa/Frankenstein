@@ -1,0 +1,91 @@
+spring:
+  application:
+    name: service-order
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/order_db?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+        jdbc:
+          batch_size: 50
+          order_inserts: true
+  server:
+    port: 8080
+
+  rabbitmq:
+    host: localhost
+    ports:
+      - "5672:5672"
+    username: guest
+    password: guest
+
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 20
+        prefetch: 5
+
+  data:
+    redis:
+      host: localhost
+      ports:
+        - "6379:6379"
+      timeout: 60000
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
+    display-request-duration: true
+    disable-swagger-default-url: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - caches
+          - loggers
+          - mappings
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true
+    rabbit:
+      enabled: true
+    redis:
+      enabled: true
+    metrics:
+      enable:
+        all: true
