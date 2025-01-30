@@ -54,7 +54,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> updateOrderStatus(@PathVariable Long id, @RequestParam OrderStatus newStatus) {
+    public ResponseEntity<Void> updateOrderStatus(@PathVariable String id, @RequestParam OrderStatus newStatus) {
         loggerUtils.logInfo(OrderController.class, "Order with ID {} not found", id);
         updateOrderStatusUseCase.execute(id, newStatus);
         return ResponseEntity.ok().build();
@@ -78,7 +78,7 @@ public class OrderController {
     @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable String id) {
         loggerUtils.logInfo(OrderController.class, "Received request to fetch order by ID: {}", id);
 
         OrderResponseDto order = getOrderUseCase.getById(id);
@@ -92,7 +92,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable String id) {
         loggerUtils.logInfo(OrderController.class, "Order with ID {} not found", id);
         deleteOrderUseCase.execute(id);
         return ResponseEntity.noContent().build();

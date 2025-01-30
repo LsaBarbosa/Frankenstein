@@ -1,12 +1,10 @@
 package com.santanna.serviceorder.domain.model;
 
-import com.santanna.serviceorder.domain.exception.DomainException;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Order {
-    private Long id;
+    private String id;
     private String orderNumber;
     private String productName;
     private Integer quantity;
@@ -16,7 +14,7 @@ public class Order {
 
     public Order() {}
 
-    public Order(Long id, String orderNumber, String productName, Integer quantity, BigDecimal totalValue, OrderStatus orderStatus, LocalDateTime createdAt) {
+    public Order(String id, String orderNumber, String productName, Integer quantity, BigDecimal totalValue, OrderStatus orderStatus, LocalDateTime createdAt) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.productName = productName;
@@ -26,11 +24,11 @@ public class Order {
         this.createdAt = createdAt;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

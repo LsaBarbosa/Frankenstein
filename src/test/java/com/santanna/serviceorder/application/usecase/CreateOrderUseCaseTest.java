@@ -40,7 +40,7 @@ public class CreateOrderUseCaseTest {
     void setUp() {
         requestDto = new OrderRequestDto("123", "Product A", 2, BigDecimal.valueOf(100.0));
 
-        order = new Order(1L, "123", "Product A", 2, BigDecimal.valueOf(200.0)
+        order = new Order("1", "123", "Product A", 2, BigDecimal.valueOf(200.0)
                 , OrderStatus.PROCESSED, LocalDateTime.now());
     }
 
@@ -49,9 +49,7 @@ public class CreateOrderUseCaseTest {
     public void shouldThrowBusinessExceptionWhenOrderNumberExists() {
         when(orderRepository.findByOrderNumber("123")).thenReturn(Optional.of(order));
 
-        var exception = assertThrows(BusinessException.class, () -> {
-            createOrderUseCase.execute(requestDto);
-        });
+        var exception = assertThrows(BusinessException.class, () -> createOrderUseCase.execute(requestDto));
 
         assertEquals("There is already an order with this number.", exception.getMessage());
         verify(orderRepository, never()).save(any());
@@ -66,7 +64,7 @@ public class CreateOrderUseCaseTest {
         var responseDto = createOrderUseCase.execute(requestDto);
 
         assertNotNull(responseDto.id());
-        assertEquals(responseDto.orderNumber(), responseDto.orderNumber());
+        assertEquals(requestDto.orderNumber(), responseDto.orderNumber());
         assertEquals(requestDto.productName(), responseDto.productName());
         assertEquals(requestDto.quantity(), responseDto.quantity());
         assertEquals(

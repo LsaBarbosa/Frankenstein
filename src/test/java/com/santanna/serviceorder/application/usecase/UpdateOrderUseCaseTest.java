@@ -27,6 +27,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UpdateOrderUseCaseTest {
 
+    public static final String ID = "1L";
     @InjectMocks
     private UpdateOrderUseCase updateOrderUseCase;
     @Mock
@@ -38,17 +39,17 @@ public class UpdateOrderUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        order = new Order(1L, "123", "Product A", 2, BigDecimal.valueOf(200.0)
+        order = new Order(ID, "123", "Product A", 2, BigDecimal.valueOf(200.0)
                 , OrderStatus.PROCESSED, LocalDateTime.now());
     }
 
     @Test
     @DisplayName("Shoul Throw NotFound Exception When Id Not Founded")
     public void shouldThrowNotFoundExceptionWhenIdNotFounded() {
-        when(orderRepository.findById(1L)).thenReturn(Optional.empty());
+        when(orderRepository.findById(ID)).thenReturn(Optional.empty());
 
         var exception = assertThrows(NotFoundException.class, () -> {
-            updateOrderUseCase.execute(1L, OrderStatus.PROCESSED);
+            updateOrderUseCase.execute(ID, OrderStatus.PROCESSED);
         });
 
         assertEquals("Order not found", exception.getMessage());
@@ -59,14 +60,14 @@ public class UpdateOrderUseCaseTest {
     @Test
     @DisplayName("should Convert UpdateOrder To ResponseDto Correctly")
     public void shouldConvertUpdateOrderToResponseDtoCorrectly() {
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 
-        order = new Order(1L, "123", "Product A", 2, BigDecimal.valueOf(200.0)
+        order = new Order(ID, "123", "Product A", 2, BigDecimal.valueOf(200.0)
                 , OrderStatus.DELIVERED, LocalDateTime.now());
 
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
-        var responseDto = updateOrderUseCase.execute(1L, OrderStatus.DELIVERED);
+        var responseDto = updateOrderUseCase.execute(ID, OrderStatus.DELIVERED);
         var responseExpected = OrderConverter.toDto(order);
 
         assertEquals(responseExpected, responseDto);
@@ -75,14 +76,14 @@ public class UpdateOrderUseCaseTest {
     @Test
     @DisplayName("should UpdateOrder Correctly")
     public void shouldUpdateOrderCorrectly() {
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 
-        order = new Order(1L, "123", "Product A", 2, BigDecimal.valueOf(200.0)
+        order = new Order(ID, "123", "Product A", 2, BigDecimal.valueOf(200.0)
                 , OrderStatus.DELIVERED, LocalDateTime.now());
 
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
-        var responseDto = updateOrderUseCase.execute(1L, OrderStatus.DELIVERED);
+        var responseDto = updateOrderUseCase.execute(ID, OrderStatus.DELIVERED);
 
         assertNotNull(responseDto);
         assertNotNull(responseDto.id());
@@ -92,14 +93,14 @@ public class UpdateOrderUseCaseTest {
         verify(loggerUtils).logInfo(
                 eq(UpdateOrderUseCase.class),
                 eq("Updating order status. ID: {}, New Status: {}"),
-                eq(1L),
+                eq(ID),
                 eq(OrderStatus.DELIVERED)
         );
 
         verify(loggerUtils).logInfo(
                 eq(UpdateOrderUseCase.class),
                 eq("Order status updated successfully. ID: {}, New Status: {}"),
-                eq(1L),
+                eq(ID),
                 eq(OrderStatus.DELIVERED)
         );
     }

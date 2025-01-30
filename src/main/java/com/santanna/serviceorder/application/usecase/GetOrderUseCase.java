@@ -24,7 +24,7 @@ public class GetOrderUseCase {
     }
 
     @Cacheable(value = "orders", key = "#id")
-    public OrderResponseDto getById(Long id) {
+    public OrderResponseDto getById(String id) {
         loggerUtils.logInfo(GetOrderUseCase.class, "Fetching order by ID: {}", id);
 
         var order = orderRepository.findById(id).orElseThrow(()-> new NotFoundException("Order not found"));

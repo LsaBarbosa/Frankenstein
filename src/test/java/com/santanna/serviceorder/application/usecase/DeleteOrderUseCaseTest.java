@@ -4,9 +4,7 @@ import com.santanna.serviceorder.application.usecase.exception.BusinessException
 import com.santanna.serviceorder.application.usecase.exception.NotFoundException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
 import com.santanna.serviceorder.domain.model.Order;
-import com.santanna.serviceorder.domain.model.OrderStatus;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +31,7 @@ public class DeleteOrderUseCaseTest {
     @InjectMocks
     private DeleteOrderUseCase deleteOrderUseCase;
 
-    private final Long ORDER_ID = 1L;
+    private final String ORDER_ID = "1L";
 
     @Test
     @DisplayName("Should delete order successfully")

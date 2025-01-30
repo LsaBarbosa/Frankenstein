@@ -21,7 +21,7 @@ public abstract class OrderBuilder {
 
     // será usado na criação do objeto
     // retirar o abstract tira a obrigatoriedade de implementar
-    public  abstract void buildId(Long id);
+    public  abstract void buildId(String id);
     public abstract void buildOrderNumber(String orderNumber);
     public abstract void buildProductName(String productName);
     public abstract void buildQuantity(Integer quantity);

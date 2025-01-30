@@ -1,37 +1,24 @@
 package com.santanna.serviceorder.infrastructure.entity;
 
 import com.santanna.serviceorder.domain.model.OrderStatus;
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "orders",indexes = {
-        @Index(name = "idx_order_number", columnList = "orderNumber"),
-        @Index(name = "idx_order_status", columnList = "orderStatus")
-})
+@Document
 public class OrderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private String orderNumber;
-
     private String productName;
-
     private Integer quantity;
-
     private BigDecimal totalValue;
-
-    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-
     private LocalDateTime createdAt;
 }

@@ -11,7 +11,6 @@ import com.santanna.serviceorder.application.usecase.exception.BusinessException
 import com.santanna.serviceorder.application.usecase.exception.NotFoundException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
 import com.santanna.serviceorder.domain.common.PaginatedResult;
-import com.santanna.serviceorder.domain.model.Order;
 import com.santanna.serviceorder.domain.model.OrderStatus;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -58,7 +54,7 @@ public class OrderControllerTest {
     private LoggerUtils loggerUtils;
 
     private MockMvc mockMvc;
-    private final Long ORDER_ID = 1L;
+    private final String ORDER_ID = "1L";
     private final OrderResponseDto mockResponse = createMockResponse();
 
 
@@ -127,9 +123,9 @@ public class OrderControllerTest {
     public void shouldBeAbleToGetAllOrders() throws Exception {
 
         List<OrderResponseDto> mockOrders = List.of(
-                new OrderResponseDto(1L, "ORD123", "Product A",
+                new OrderResponseDto("1L", "ORD123", "Product A",
                         2, BigDecimal.valueOf(200.0), OrderStatus.PROCESSED, LocalDateTime.now()),
-                new OrderResponseDto(2L, "ORD456", "Product B",
+                new OrderResponseDto("2L", "ORD456", "Product B",
                         1, BigDecimal.valueOf(150.0), OrderStatus.DELIVERED, LocalDateTime.now())
         );
 
@@ -208,7 +204,7 @@ public class OrderControllerTest {
     @Test
     @DisplayName("Should throw NotFoundException when updating non-existent order")
     public void shouldThrowNotFoundExceptionWhenUpdatingNonExistentOrder() throws Exception {
-        Long invalidId = 9999L;
+        String invalidId = "9999L";
 
         when(updateOrderUseCase.execute(eq(invalidId),any())).thenThrow(new NotFoundException("Order not found"));
         mockMvc.perform(MockMvcRequestBuilders.patch("/orders/{id}/status", invalidId)
@@ -226,7 +222,7 @@ public class OrderControllerTest {
     @Test
     @DisplayName("should Throw NotFoundException When Deleting Non Existent Order")
     public void shouldThrowNotFoundExceptionWhenDeletingNonExistentOrder() throws Exception {
-        Long invalidId = 999L;
+        String invalidId = "9999L";
 
         doThrow(new NotFoundException("Order not found with ID: " + invalidId))
                 .when(deleteOrderUseCase).execute(invalidId);

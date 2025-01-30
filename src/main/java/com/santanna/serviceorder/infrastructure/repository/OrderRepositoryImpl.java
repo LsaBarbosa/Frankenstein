@@ -37,7 +37,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
+    public Optional<Order> findById(String id) {
         try {
             return springDataOrderRepository.findById(id)
                     .map(this::toDomain);
@@ -77,7 +77,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         try {
             springDataOrderRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

@@ -9,11 +9,11 @@ public interface OrderRepository {
 
     Optional<Order> findByOrderNumber(String orderNumber);
 
-    Optional<Order> findById(Long id);
+    Optional<Order> findById(String id);
 
     PaginatedResult<Order> findAll(int page, int size);
 
     Order save(Order order);
 
-    void deleteById(Long id);
+    void deleteById(String id);
 }

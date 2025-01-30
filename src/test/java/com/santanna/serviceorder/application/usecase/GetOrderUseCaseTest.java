@@ -26,6 +26,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GetOrderUseCaseTest {
+    public static final String ID = "1L";
     @Mock
     private LoggerUtils loggerUtils;
 
@@ -40,7 +41,7 @@ class GetOrderUseCaseTest {
     void setUp() {
 
 
-        order = new Order(1L, "123", "Product A", 2, BigDecimal.valueOf(200.0)
+        order = new Order("1L", "123", "Product A", 2, BigDecimal.valueOf(200.0)
                 , OrderStatus.PROCESSED, LocalDateTime.now());
 
     }
@@ -49,9 +50,9 @@ class GetOrderUseCaseTest {
     @DisplayName("should Return OrderResponseDto When Order Found")
     void shouldReturnOrderResponseDtoWhenOrderFound() {
 
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+        when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 
-        var responseDto = getOrderUseCase.getById(1L);
+        var responseDto = getOrderUseCase.getById(ID);
 
         assertNotNull(responseDto);
         assertNotNull(responseDto.id());
@@ -66,25 +67,25 @@ class GetOrderUseCaseTest {
         verify(loggerUtils).logInfo(
                 eq(GetOrderUseCase.class),
                 eq("Fetching order by ID: {}"),
-                eq(1L)
+                eq(ID)
         );
         verify(loggerUtils).logInfo(
                 eq(GetOrderUseCase.class),
                 eq("Order found. ID: {}"),
-                eq(1L)
+                eq(ID)
         );
 
-        verify(orderRepository).findById(1L);
+        verify(orderRepository).findById(ID);
     }
 
     @Test
     @DisplayName("should Throw NotFoundException When Order NotFound")
     void shouldThrowNotFoundExceptionWhenOrderNotFound() {
-        when(orderRepository.findById(99L)).thenReturn(Optional.empty());
+        when(orderRepository.findById(ID)).thenReturn(Optional.empty());
 
         NotFoundException notFoundException = assertThrows(
                 NotFoundException.class,
-                () -> getOrderUseCase.getById(99L)
+                () -> getOrderUseCase.getById(ID)
         );
 
         assertEquals("Order not found", notFoundException.getMessage());
@@ -92,17 +93,17 @@ class GetOrderUseCaseTest {
         verify(loggerUtils).logInfo(
                 eq(GetOrderUseCase.class),
                 eq("Fetching order by ID: {}"),
-                eq(99L)
+                eq(ID)
         );
 
-        verify(orderRepository).findById(99L);
+        verify(orderRepository).findById(ID);
     }
 
     @Test
     @DisplayName("should Return All Orders Paginated")
     void shouldReturnAllOrdersPaginated() {
         Order order1 = new Order();
-       var order2 = new Order(2L, "124", "Product B", 1, BigDecimal.valueOf(100.0)
+       var order2 = new Order("2L", "124", "Product B", 1, BigDecimal.valueOf(100.0)
                 , OrderStatus.PROCESSED, LocalDateTime.now());
 
         List<Order> orderList = Arrays.asList(order1, order2);

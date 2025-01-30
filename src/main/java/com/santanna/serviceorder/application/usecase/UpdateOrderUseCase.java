@@ -6,7 +6,6 @@ import com.santanna.serviceorder.application.utils.LoggerUtils;
 import com.santanna.serviceorder.domain.model.OrderConverter;
 import com.santanna.serviceorder.domain.model.OrderStatus;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,8 @@ public class UpdateOrderUseCase {
         this.orderRepository = orderRepository;
     }
 
-    @Transactional
     @CacheEvict(value = "orders", key = "#id", allEntries = true)
-    public OrderResponseDto execute(Long id, OrderStatus newStatus) {
+    public OrderResponseDto execute(String id, OrderStatus newStatus) {
         loggerUtils.logInfo(UpdateOrderUseCase.class, "Updating order status. ID: {}, New Status: {}", id, newStatus);
 
         var order = orderRepository.findById(id)

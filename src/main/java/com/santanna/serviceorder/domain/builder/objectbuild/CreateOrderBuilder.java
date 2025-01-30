@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class CreateOrderBuilder extends OrderBuilder {
 
     @Override
-    public void buildId(Long id) {
+    public void buildId(String id) {
     }
 
     @Override

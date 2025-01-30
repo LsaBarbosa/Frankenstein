@@ -4,7 +4,6 @@ import com.santanna.serviceorder.application.usecase.exception.BusinessException
 import com.santanna.serviceorder.application.usecase.exception.NotFoundException;
 import com.santanna.serviceorder.application.utils.LoggerUtils;
 import com.santanna.serviceorder.domain.repository.OrderRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,8 @@ public class DeleteOrderUseCase {
     }
 
 
-    @Transactional
     @CacheEvict(value = "orders", key = "#id")
-    public void execute(Long id) {
+    public void execute(String id) {
         loggerUtils.logInfo(DeleteOrderUseCase.class, "Attempting to delete order with ID: {}", id);
 
         var isIsPresent = orderRepository.findById(id).isPresent();

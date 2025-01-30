@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 
 public class OrderDirector {
 
-    private OrderBuilder builder;
+    private OrderBuilder  builder;
 
     public OrderDirector(OrderBuilder builder) {
         this.builder = builder;
     }
 
-    public void getBuilder(Long id, String orderNumber, String productName, Integer quantity, BigDecimal totalValue,
+    public void getBuilder(String id, String orderNumber, String productName, Integer quantity, BigDecimal totalValue,
                            OrderStatus status, LocalDateTime createdAt) {
         builder.buildId(id);
         builder.buildOrderNumber(orderNumber);

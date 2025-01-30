@@ -1,9 +1,7 @@
 package com.santanna.serviceorder.application.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.santanna.serviceorder.domain.model.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,7 +9,7 @@ import java.time.LocalDateTime;
 
 public record OrderResponseDto (
     @Schema(description = "ID do pedido", example = "1")
-    Long id,
+    String id,
 
     @Schema(description = "Número do pedido", example = "ORD12345")
     String orderNumber,
